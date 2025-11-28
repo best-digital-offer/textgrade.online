@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://textgrader.online/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin areas (if any)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.log$
+
+# Allow important pages
+Allow: /about.html
+Allow: /tools.html
+Allow: /blog.html
+Allow: /contact.html
+Allow: /privacy.html
+Allow: /terms.html
+Allow: /flesch-reading-ease.html
+Allow: /flesch-kincaid.html
+Allow: /gunning-fog.html
+Allow: /smog-index.html

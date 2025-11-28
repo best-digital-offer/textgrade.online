@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Text Grader & Readability Score Checker - Analyze reading level, grade level, and text complexity instantly. Perfect for writers, students, and educators.">
+    <meta name="keywords" content="readability score, text grader, reading level, Flesch-Kincaid, grade level, text analysis, writing tools">
+    <title>TextGrader.online - Free Readability Score & Text Analysis Tool</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--success);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            padding: 3rem 0;
+            text-align: center;
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .tool-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section, .results-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .input-section h2, .results-section h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-card {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .grade-indicator {
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        
+        .grade-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #FFC107, #F44336);
+            width: 0%;
+            transition: width 1s;
+        }
+        
+        .grade-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .interpretation {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+        }
+        
+        .interpretation h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .content-section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .content-section h3 {
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        .content-section p {
+            margin-bottom: 1rem;
+        }
+        
+        .content-section ul, .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .ad-container {
+            margin: 2rem 0;
+            text-align: center;
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            color: var(--success);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #495057;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        .sample-texts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .sample-texts {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .sample-btn {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .sample-btn:hover {
+            background: #e9ecef;
+            border-color: var(--primary);
+        }
+        
+        .sample-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+        
+        .sample-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .word-counts {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Text<span>Grader</span>.online</div>
+                <nav>
+                    <ul>
+                        <li><a href="#tool">Text Grader</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="tools.html">Tools</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Free Readability Score & Text Analysis Tool</h1>
+            <p>Instantly check the reading level, grade level, and complexity of any text. Perfect for writers, students, educators, and content creators.</p>
+        </section>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section id="tool" class="tool-container">
+            <div class="input-section">
+                <h2>Analyze Your Text</h2>
+                <textarea id="text-input" placeholder="Paste or type your text here to analyze its readability..."></textarea>
+                
+                <div class="word-counts">
+                    <span id="word-count">Words: 0</span>
+                    <span id="character-count">Characters: 0</span>
+                    <span id="sentence-count">Sentences: 0</span>
+                </div>
+                
+                <div class="sample-texts">
+                    <button class="sample-btn" data-sample="academic">
+                        <div class="sample-title">Academic Text</div>
+                        <div class="sample-desc">Formal research paper excerpt</div>
+                    </button>
+                    <button class="sample-btn" data-sample="blog">
+                        <div class="sample-title">Blog Post</div>
+                        <div class="sample-desc">Casual article for general audience</div>
+                    </button>
+                    <button class="sample-btn" data-sample="children">
+                        <div class="sample-title">Children's Story</div>
+                        <div class="sample-desc">Simple narrative for young readers</div>
+                    </button>
+                </div>
+                
+                <button id="analyze-btn" class="btn btn-block">Analyze Readability</button>
+            </div>
+            
+            <div class="results-section">
+                <h2>Readability Results</h2>
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-value" id="flesch-reading-ease">-</div>
+                        <div class="result-label">Flesch Reading Ease</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-value" id="flesch-grade">-</div>
+                        <div class="result-label">Flesch-Kincaid Grade</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-value" id="gunning-fog">-</div>
+                        <div class="result-label">Gunning Fog Index</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-value" id="smog-index">-</div>
+                        <div class="result-label">SMOG Index</div>
+                    </div>
+                </div>
+                
+                <div class="grade-indicator">
+                    <div class="grade-fill" id="grade-fill"></div>
+                </div>
+                <div class="grade-labels">
+                    <span>Very Easy</span>
+                    <span>Standard</span>
+                    <span>Very Difficult</span>
+                </div>
+                
+                <div class="interpretation">
+                    <h3>Interpretation</h3>
+                    <p id="interpretation-text">Enter text above to see readability analysis and interpretation.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section id="about" class="content-section">
+            <h2>About Readability Scores</h2>
+            <p>Readability scores are formulas designed to evaluate how easy or difficult a piece of text is to read. These metrics help writers tailor their content to specific audiences, ensuring that their message is communicated effectively.</p>
+            
+            <h3>Why Readability Matters</h3>
+            <p>In today's information-saturated world, readability is more important than ever. Whether you're creating educational materials, marketing content, legal documents, or web content, understanding your text's readability can significantly impact how your audience receives your message.</p>
+            
+            <p>Research shows that texts with appropriate readability levels:</p>
+            <ul>
+                <li>Increase comprehension and retention</li>
+                <li>Improve user engagement and satisfaction</li>
+                <li>Enhance accessibility for diverse audiences</li>
+                <li>Boost conversion rates for online content</li>
+                <li>Reduce cognitive load on readers</li>
+            </ul>
+            
+            <h3>Understanding the Readability Formulas</h3>
+            
+            <h4>Flesch Reading Ease</h4>
+            <p>Developed by Rudolf Flesch in 1948, the Flesch Reading Ease score is one of the oldest and most trusted readability formulas. It calculates a score between 0 and 100, with higher scores indicating easier reading.</p>
+            <p>The formula is based on two factors: average sentence length (ASL) and average syllables per word (ASW). Texts with shorter sentences and words receive higher scores. Generally, scores of 90-100 are considered easily understandable by 11-year-old students, while scores of 0-30 are best suited for university graduates.</p>
+            
+            <h4>Flesch-Kincaid Grade Level</h4>
+            <p>This adaptation of the Flesch Reading Ease formula was developed for the U.S. Navy in 1975. It translates the readability score into a U.S. grade level, indicating the number of years of education generally required to understand the text.</p>
+            <p>For example, a score of 8.0 means that an eighth grader would be able to understand the document. Most professional documents aim for a grade level between 7 and 10, which corresponds to the reading level of the average adult.</p>
+            
+            <h4>Gunning Fog Index</h4>
+            <p>Developed by Robert Gunning in 1952, this index estimates the years of formal education needed to understand a text on first reading. The formula considers average sentence length and the percentage of complex words (words with three or more syllables).</p>
+            <p>The Fog Index is particularly popular in business and technical writing. A score of 12 is considered ideal for general readership, while scores above 18 indicate very difficult text suitable only for specialized audiences.</p>
+            
+            <h4>SMOG Index</h4>
+            <p>SMOG (Simple Measure of Gobbledygook) was developed by G. Harry McLaughlin in 1969 as a more accurate alternative to other readability formulas, particularly for longer texts. It calculates the years of education needed to understand a piece of writing based on the number of polysyllabic words.</p>
+            <p>The SMOG index is widely used in healthcare communication to ensure patient materials are accessible. Research suggests it's one of the most reliable predictors of comprehension, especially for texts above the 4th grade level.</p>
+            
+            <h3>Applications of Readability Analysis</h3>
+            
+            <h4>Education</h4>
+            <p>Educators use readability scores to select appropriate reading materials for students at different learning levels. By matching text complexity to student ability, teachers can optimize learning outcomes and prevent frustration.</p>
+            
+            <h4>Content Marketing</h4>
+            <p>Marketers analyze readability to ensure their content resonates with target audiences. Different demographics have different reading levels, and tailoring content appropriately can significantly impact engagement and conversion rates.</p>
+            
+            <h4>Technical Writing</h4>
+            <p>Technical writers use readability metrics to create documentation that is accessible to users with varying levels of expertise. Clear, readable technical documentation reduces support costs and improves user satisfaction.</p>
+            
+            <h4>Legal and Government Documents</h4>
+            <p>Many jurisdictions now require plain language in legal and government communications. Readability analysis helps ensure that important information is accessible to all citizens, regardless of education level.</p>
+            
+            <h4>Healthcare Communication</h4>
+            <p>Medical professionals use readability formulas to create patient education materials that can be understood by people with limited health literacy, improving treatment adherence and health outcomes.</p>
+            
+            <h3>Limitations of Readability Formulas</h3>
+            <p>While readability formulas provide valuable insights, they have limitations. They cannot assess:</p>
+            <ul>
+                <li>Conceptual complexity - Simple words may explain difficult concepts</li>
+                <li>Text organization and structure</li>
+                <li>Reader motivation and prior knowledge</li>
+                <li>Cultural relevance and context</li>
+                <li>Visual elements that aid comprehension</li>
+            </ul>
+            <p>Therefore, readability scores should be used as guidelines rather than absolute measures of text quality. The most effective approach combines quantitative readability analysis with qualitative assessment of content, structure, and audience needs.</p>
+            
+            <h3>Improving Readability</h3>
+            <p>If your text scores lower than desired on readability metrics, consider these strategies:</p>
+            <ol>
+                <li><strong>Shorten sentences:</strong> Break long sentences into shorter, more manageable ones.</li>
+                <li><strong>Use simpler words:</strong> Replace complex vocabulary with more common alternatives when possible.</li>
+                <li><strong>Vary sentence structure:</strong> Mix short and medium-length sentences to create rhythm.</li>
+                <li><strong>Use active voice:</strong> Active constructions are generally easier to understand than passive ones.</li>
+                <li><strong>Add headings and subheadings:</strong> Break text into logical sections with descriptive titles.</li>
+                <li><strong>Use bullet points and lists:</strong> Present information in scannable formats when appropriate.</li>
+                <li><strong>Include examples:</strong> Concrete examples help illustrate abstract concepts.</li>
+            </ol>
+            
+            <p>By regularly checking your text with our free readability tool and implementing these strategies, you can create content that effectively communicates with your intended audience.</p>
+        </section>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section id="faq" class="content-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <h3>What is the ideal readability score?</h3>
+            <p>The ideal readability score depends on your target audience. For general public content, aim for a Flesch Reading Ease score of 60-70 (8th-9th grade level). Academic papers might target 30-50 (12th grade to college level), while content for children should be at 90-100 (4th-5th grade level).</p>
+            
+            <h3>How accurate are readability formulas?</h3>
+            <p>Readability formulas provide a good estimate of text difficulty but have limitations. They measure surface features like word and sentence length but cannot assess conceptual difficulty, organization, or reader background knowledge. Use them as guidelines rather than absolute measures.</p>
+            
+            <h3>Can I use this tool for languages other than English?</h3>
+            <p>Our current tool is optimized for English text. While it may provide scores for other languages, the results may not be accurate as readability formulas are language-specific. We're working on adding support for additional languages in future updates.</p>
+            
+            <h3>Why do different formulas give different results?</h3>
+            <p>Different readability formulas emphasize different text features. The Flesch formulas focus on syllables per word and sentence length, Gunning Fog emphasizes complex words, and SMOG focuses specifically on polysyllabic words. These different approaches result in varying scores, each with their own strengths.</p>
+            
+            <h3>How can I improve my text's readability?</h3>
+            <p>To improve readability: shorten long sentences, replace complex words with simpler alternatives, use active voice, break text into paragraphs with headings, and use lists and examples. Our tool provides specific feedback based on your text's characteristics.</p>
+            
+            <h3>Is there a maximum text length for analysis?</h3>
+            <p>Our tool can handle texts of up to 10,000 words. For longer documents, consider analyzing sections separately to get more targeted feedback on different parts of your content.</p>
+            
+            <h3>Do readability scores affect SEO?</h3>
+            <p>While Google hasn't confirmed readability as a direct ranking factor, it likely impacts user experience metrics that do affect rankings. Readable content tends to have lower bounce rates, longer time on page, and higher engagement - all positive SEO signals.</p>
+            
+            <h3>Can I save my analysis results?</h3>
+            <p>Currently, our tool doesn't save analysis results. We recommend taking screenshots or copying the results if you need to reference them later. We're developing account features that will allow saving and comparing analyses over time.</p>
+            
+            <h3>Are there any texts that shouldn't be analyzed with these formulas?</h3>
+            <p>Readability formulas work best with prose paragraphs. They may produce misleading results for poetry, code, lists of ingredients, dialogue-heavy text, or content with many proper nouns. In these cases, consider the scores as rough estimates rather than precise measurements.</p>
+            
+            <h3>How often should I check readability?</h3>
+            <p>We recommend checking readability during the editing process for all important documents. For content creators, making readability analysis part of your standard workflow ensures your content remains accessible to your target audience.</p>
+        </section>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>TextGrader.online</h3>
+                    <p>Your free, instant readability analysis tool. Check text complexity, reading level, and grade level with multiple proven formulas.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Text Analysis Tool</a></li>
+                        <li><a href="about.html">About Readability</a></li>
+                        <li><a href="tools.html">All Tools</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Readability Formulas</h3>
+                    <ul>
+                        <li><a href="flesch-reading-ease.html">Flesch Reading Ease</a></li>
+                        <li><a href="flesch-kincaid.html">Flesch-Kincaid Grade Level</a></li>
+                        <li><a href="gunning-fog.html">Gunning Fog Index</a></li>
+                        <li><a href="smog-index.html">SMOG Index</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 TextGrader.online - All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textInput = document.getElementById('text-input');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const wordCount = document.getElementById('word-count');
+            const characterCount = document.getElementById('character-count');
+            const sentenceCount = document.getElementById('sentence-count');
+            const fleschReadingEase = document.getElementById('flesch-reading-ease');
+            const fleschGrade = document.getElementById('flesch-grade');
+            const gunningFog = document.getElementById('gunning-fog');
+            const smogIndex = document.getElementById('smog-index');
+            const gradeFill = document.getElementById('grade-fill');
+            const interpretationText = document.getElementById('interpretation-text');
+            const sampleButtons = document.querySelectorAll('.sample-btn');
+            
+            // Sample texts
+            const sampleTexts = {
+                academic: `The ontological argument for the existence of God, first formulated by Anselm of Canterbury in the 11th century, posits that God, by definition, is that than which nothing greater can be conceived. The argument proceeds from this definition to the necessary existence of God in reality, not merely in the understanding. Subsequent philosophers, including Descartes and Leibniz, developed variations of this argument, while critics such as Kant challenged its logical coherence, particularly objecting to the treatment of existence as a predicate. The ontological argument remains a significant topic in philosophy of religion, engaging contemporary philosophers in debates about modal logic and necessary existence.`,
+                
+                blog: `Have you ever wondered why some blog posts instantly grab your attention while others make you click away after just a few seconds? The secret often lies in readability. When content is easy to read and understand, people stay longer, engage more, and remember your message. In this post, we'll explore five simple techniques to make your writing more accessible. You'll learn how to structure sentences for maximum impact, choose words that connect with readers, and format your content so it's inviting rather than intimidating. These strategies work whether you're writing for your personal blog, company website, or social media. Let's dive in!`,
+                
+                children: `Once upon a time, in a little green house at the edge of a big forest, lived a small rabbit named Ruby. Ruby had soft white fur and long, floppy ears. She loved to hop around the garden and munch on crunchy carrots. One sunny morning, Ruby decided to visit her friend Sammy Squirrel. She put on her favorite red bow and hopped down the winding path. Along the way, she saw colorful flowers and heard birds singing happy songs. When Ruby reached the big oak tree where Sammy lived, she found him gathering acorns for winter. "Hello, Sammy!" called Ruby. "Would you like to play hide and seek?" Sammy nodded excitedly. And so their fun day began.`
+            };
+            
+            // Update word count and character count in real-time
+            textInput.addEventListener('input', function() {
+                const text = textInput.value;
+                const words = text.trim() ? text.trim().split(/\s+/) : [];
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                
+                wordCount.textContent = `Words: ${words.length}`;
+                characterCount.textContent = `Characters: ${text.length}`;
+                sentenceCount.textContent = `Sentences: ${sentences.length}`;
+            });
+            
+            // Sample text buttons
+            sampleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sampleType = this.getAttribute('data-sample');
+                    textInput.value = sampleTexts[sampleType];
+                    textInput.dispatchEvent(new Event('input'));
+                });
+            });
+            
+            // Analyze button click
+            analyzeBtn.addEventListener('click', function() {
+                const text = textInput.value.trim();
+                
+                if (!text) {
+                    alert('Please enter some text to analyze.');
+                    return;
+                }
+                
+                const results = calculateReadability(text);
+                
+                // Update UI with results
+                fleschReadingEase.textContent = results.fleschReadingEase.toFixed(1);
+                fleschGrade.textContent = results.fleschGradeLevel.toFixed(1);
+                gunningFog.textContent = results.gunningFog.toFixed(1);
+                smogIndex.textContent = results.smog.toFixed(1);
+                
+                // Update grade indicator
+                const easePercentage = Math.max(0, Math.min(100, results.fleschReadingEase));
+                gradeFill.style.width = `${easePercentage}%`;
+                
+                // Update interpretation
+                interpretationText.textContent = getInterpretation(results);
+            });
+            
+            // Readability calculation functions
+            function calculateReadability(text) {
+                // Basic text statistics
+                const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                const words = text.split(/\s+/).filter(w => w.length > 0);
+                const syllables = countSyllables(text);
+                
+                // Calculate averages
+                const avgWordsPerSentence = words.length / sentences.length;
+                const avgSyllablesPerWord = syllables / words.length;
+                
+                // Flesch Reading Ease
+                const fleschReadingEase = 206.835 - (1.015 * avgWordsPerSentence) - (84.6 * avgSyllablesPerWord);
+                
+                // Flesch-Kincaid Grade Level
+                const fleschGradeLevel = (0.39 * avgWordsPerSentence) + (11.8 * avgSyllablesPerWord) - 15.59;
+                
+                // Gunning Fog Index
+                const complexWords = words.filter(word => countSyllablesInWord(word) >= 3).length;
+                const percentComplexWords = (complexWords / words.length) * 100;
+                const gunningFog = 0.4 * (avgWordsPerSentence + percentComplexWords);
+                
+                // SMOG Index
+                const polysyllables = words.filter(word => countSyllablesInWord(word) >= 3).length;
+                const smog = 1.043 * Math.sqrt(polysyllables * (30 / sentences.length)) + 3.1291;
+                
+                return {
+                    fleschReadingEase,
+                    fleschGradeLevel,
+                    gunningFog,
+                    smog,
+                    wordCount: words.length,
+                    sentenceCount: sentences.length,
+                    avgWordsPerSentence,
+                    avgSyllablesPerWord
+                };
+            }
+            
+            function countSyllables(text) {
+                const words = text.toLowerCase().split(/\s+/);
+                return words.reduce((total, word) => total + countSyllablesInWord(word), 0);
+            }
+            
+            function countSyllablesInWord(word) {
+                word = word.toLowerCase().replace(/[^a-z]/g, '');
+                if (word.length <= 3) return 1;
+                
+                // Basic syllable counting rules
+                let syllables = 0;
+                const vowels = 'aeiouy';
+                let prevWasVowel = false;
+                
+                for (let i = 0; i < word.length; i++) {
+                    const isVowel = vowels.includes(word[i]);
+                    if (isVowel && !prevWasVowel) {
+                        syllables++;
+                    }
+                    prevWasVowel = isVowel;
+                }
+                
+                // Adjust for common exceptions
+                if (word.endsWith('e') && syllables > 1) syllables--;
+                if (word.endsWith('le') && !vowels.includes(word[word.length - 3])) syllables++;
+                if (syllables === 0) syllables = 1;
+                
+                return syllables;
+            }
+            
+            function getInterpretation(results) {
+                const ease = results.fleschReadingEase;
+                const grade = results.fleschGradeLevel;
+                
+                if (ease >= 90) {
+                    return `Your text is very easy to read. It's easily understood by an average 11-year-old student (${grade.toFixed(1)} grade level). This is ideal for children's materials, simple instructions, or content targeting readers with basic literacy skills.`;
+                } else if (ease >= 80) {
+                    return `Your text is easy to read. It's suitable for most readers, including those with a 7th to 8th grade education (${grade.toFixed(1)} grade level). This works well for popular fiction, general blog content, and mainstream marketing materials.`;
+                } else if (ease >= 70) {
+                    return `Your text is fairly easy to read. It's appropriate for the general public with an 8th to 9th grade reading level (${grade.toFixed(1)} grade level). This is the recommended level for most web content and general audience publications.`;
+                } else if (ease >= 60) {
+                    return `Your text is at a standard reading level. It's understandable for high school graduates (${grade.toFixed(1)} grade level). This works for quality journalism, professional documents, and academic materials for non-specialists.`;
+                } else if (ease >= 50) {
+                    return `Your text is fairly difficult to read. It's best for college-level readers (${grade.toFixed(1)} grade level). This is appropriate for academic papers, technical documentation, and specialized professional content.`;
+                } else if (ease >= 30) {
+                    return `Your text is difficult to read. It requires university-level education (${grade.toFixed(1)} grade level). This level is typical for academic journals, legal documents, and complex technical manuals.`;
+                } else {
+                    return `Your text is very difficult to read. It's best understood by graduate-level readers (${grade.toFixed(1)} grade level). This extreme complexity is usually only appropriate for highly specialized academic or technical audiences.`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

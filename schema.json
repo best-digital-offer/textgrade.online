@@ -1,0 +1,50 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "TextGrader.online",
+  "alternateName": "Text Grader",
+  "description": "Free online readability analysis tool that calculates Flesch Reading Ease, Flesch-Kincaid Grade Level, Gunning Fog Index, and SMOG Index scores for any text.",
+  "url": "https://textgrader.online",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "TextGrader.online",
+    "url": "https://textgrader.online"
+  },
+  "featureList": [
+    "Flesch Reading Ease Calculator",
+    "Flesch-Kincaid Grade Level Analysis",
+    "Gunning Fog Index Measurement",
+    "SMOG Index Calculation",
+    "Word Count Statistics",
+    "Sentence Analysis",
+    "Real-time Text Analysis"
+  ],
+  "screenshot": "https://textgrader.online/images/screenshot.png",
+  "softwareVersion": "1.0",
+  "datePublished": "2024-01-15",
+  "dateModified": "2024-01-15",
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "keywords": "readability, text analysis, Flesch-Kincaid, Gunning Fog, SMOG index, grade level, reading ease, content analysis, writing tools",
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Writers, Educators, Content Creators, Students, Marketers"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "TextGrader.online",
+    "url": "https://textgrader.online",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "email": "support@textgrader.online"
+    }
+  }
+}
